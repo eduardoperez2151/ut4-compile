@@ -20,6 +20,8 @@ export class Variable implements Exp {
   }
 
   compileCIL(context: CompilationContext): CompilationContext {
+    var index = context.getVar(this.id);
+    context.appendInstruction("ldloc " + index);
     return undefined;
   }
 

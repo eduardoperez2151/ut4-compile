@@ -23,7 +23,10 @@ export class Division implements Exp {
   }
 
   compileCIL(context: CompilationContext): CompilationContext {
-    return undefined;
+    this.lhs.compileCIL(context);
+    this.lhs.compileCIL(context);
+    context.appendInstruction("div");
+    return context;
   }
 
   maxStackIL(value: number): number {

@@ -23,9 +23,11 @@ export class Assignment implements Stmt {
   }
 
   compileCIL(context: CompilationContext): CompilationContext {
-    return undefined;
+    this.exp.compileCIL(context);
+    var index = context.addVar(this.id,"int32");
+    context.appendInstruction("ldc " + index);
+    return context;
   }
-
   maxStackIL(value: number): number {
     return value - 1;
   }
