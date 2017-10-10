@@ -24,7 +24,16 @@ export class IfThenElse implements Stmt {
   }
 
   compileCIL(context: CompilationContext): CompilationContext {
-    return undefined;
+    var tag1=context.getTag();
+    var tag2=context.getTag();
+    this.cond.compileCIL(context);
+    context.appendInstruction("brtrue "+tag1);
+    this.elseBody.compileCIL(context);
+    context.appendInstruction("br "+tag2);
+    context.appendInstruction(tag1);
+    this.thenBody.compileCIL(context);
+    context.appendInstruction(tag2);
+    return context;
   }
 
   maxStackIL(value: number): number {
