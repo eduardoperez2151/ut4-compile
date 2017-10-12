@@ -21,7 +21,7 @@ export class Numeral implements Exp {
   }
 
   compileCIL(context: CompilationContext): CompilationContext {
-    context.appendInstruction("ldc " + this.value);
+    context.appendInstruction("ldc.i4 " + this.value);
     return context;
   }
 

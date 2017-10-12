@@ -63,7 +63,7 @@ comp ->
   | comp "<" addsub         {% ([lhs, , rhs]) => (new CompareLess(lhs, rhs)) %}
   | comp ">=" addsub        {% ([lhs, , rhs]) => (new CompareGreatOrEqual(lhs, rhs)) %}
   | comp ">" addsub         {% ([lhs, , rhs]) => (new CompareGreat(lhs, rhs)) %}
-  | addsub
+  | addsub                  {% id %}
 
 addsub ->
     addsub "+" muldiv       {% ([lhs, , rhs]) => (new Addition(lhs, rhs)) %}

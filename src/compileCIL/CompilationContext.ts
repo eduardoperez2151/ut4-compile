@@ -17,6 +17,7 @@ export class CompilationContext {
   constructor() {
     this.count = 0;
     this.vars = [];
+    this.cil = [];
   }
 
   getTag(): string {
