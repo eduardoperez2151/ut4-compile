@@ -23,7 +23,11 @@ export class CompareNotEqual implements Exp {
   }
 
   compileCIL(context: CompilationContext): CompilationContext {
-    return undefined;
+    this.lhs.compileCIL(context);
+    this.rhs.compileCIL(context);
+    context.appendInstruction("ceq");
+    context.appendInstruction("neg");
+    return context;
   }
 
   maxStackIL(value: number): number {
