@@ -30,6 +30,8 @@ export class Division implements Exp {
   }
 
   maxStackIL(value: number): number {
-    return value - 1;
+    var lhsStack = this.lhs.maxStackIL(value);
+    var rhsStack = this.rhs.maxStackIL(value)+1;
+    return Math.max(lhsStack,rhsStack);
   }
 }
