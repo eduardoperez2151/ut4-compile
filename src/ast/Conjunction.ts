@@ -23,7 +23,10 @@ export class Conjunction implements Exp {
   }
 
   compileCIL(context: CompilationContext): CompilationContext {
-    return undefined;
+    this.lhs.compileCIL(context);
+    this.rhs.compileCIL(context);
+    context.appendInstruction("and");
+    return context;
   }
 
   maxStackIL(value: number): number {
