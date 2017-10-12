@@ -26,7 +26,7 @@ export class CompareLessOrEqual implements Exp {
     this.lhs.compileCIL(context);
     this.rhs.compileCIL(context);
     context.appendInstruction("cgt");
-    context.appendInstruction("neg");
+    context.appendInstruction("not");
     return context;
   }
 

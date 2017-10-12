@@ -26,7 +26,7 @@ export class CompareGreatOrEqual implements Exp {
     this.lhs.compileCIL(context);
     this.rhs.compileCIL(context);
     context.appendInstruction("clt")
-    context.appendInstruction("neg")
+    context.appendInstruction("not")
     return context;
   }
 

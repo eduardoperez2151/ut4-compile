@@ -26,7 +26,7 @@ export class CompareNotEqual implements Exp {
     this.lhs.compileCIL(context);
     this.rhs.compileCIL(context);
     context.appendInstruction("ceq");
-    context.appendInstruction("neg");
+    context.appendInstruction("not");
     return context;
   }
 
