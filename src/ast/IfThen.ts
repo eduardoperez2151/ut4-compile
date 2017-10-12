@@ -27,9 +27,9 @@ export class IfThen implements Stmt {
     this.cond.compileCIL(context);
     context.appendInstruction("brtrue "+tag1);
     context.appendInstruction("br "+tag2);
-    context.appendInstruction(tag1);
+    context.appendInstruction(tag1+":");
     this.thenBody.compileCIL(context);
-    context.appendInstruction(tag2);
+    context.appendInstruction(tag2+":");
     return context;
   }
 
