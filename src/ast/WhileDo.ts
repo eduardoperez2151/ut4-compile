@@ -29,7 +29,7 @@ export class WhileDo implements Stmt {
     this.body.compileCIL(context);
     context.appendInstruction(tag0+":");
     this.cond.compileCIL(context);
-    context.appendInstruction("brtrue" + tag1);
+    context.appendInstruction("brtrue " + tag1);
     return context;
   }
 

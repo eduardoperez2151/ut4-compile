@@ -41,6 +41,12 @@ export class CompilationContext {
     return this.vars.map((v) => (`${v.type} ${v.id}`)).join(',\n');
   }
 
+  addPrints():string {
+    return this.vars.map((v,i)=>
+    ["ldloc "+ i.toString(16),
+      "call void class [mscorlib]System.Console::WriteLine(int32)"].join('\n')).join('\n');
+  }
+
   getCIL(maxStack: number): string {
     return `
     .assembly Main {}
@@ -51,6 +57,7 @@ export class CompilationContext {
       .maxstack ${maxStack}
       .locals(${this.freeVariables()})
       ${this.cil.join('\n')}
+      ${this.addPrints()}
       ret
     }
     `
