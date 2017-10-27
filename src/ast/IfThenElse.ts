@@ -23,6 +23,20 @@ export class IfThenElse implements Stmt {
     return `if ${this.cond.unparse()} then { ${this.thenBody.unparse()} } else { ${this.elseBody.unparse()} }`;
   }
 
+    optimize(state: State): Stmt {
+        let optimizedCondition = cond.optimize(state);
+        let optimizedBody = this.thenBody.optimize(state);
+        let optimizedElseBody = this.elseBody.optimize(state);
+        if (optimizedCondition instanceof TruthValue) {
+            if (optimizedCondition) {
+                return optimizedBody
+            } else {
+                return optimizedElseBody
+            }
+        }
+        return new IfThenElse(optimizedCondition, optimizedBody, optimizedElseBody);
+    }
+
   compileCIL(context: CompilationContext): CompilationContext {
     var tag1=context.getTag();
     var tag2=context.getTag();

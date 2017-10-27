@@ -1,5 +1,8 @@
 import { Exp, Stmt } from './ASTNode';
 import { CompilationContext } from '../compileCIL/CompilationContext';
+import {State} from "../state/State";
+import {TruthValue} from "./TruthValue";
+import {Sequence} from "./Sequence";
 
 /**
   Representación de las sentencias condicionales.
@@ -20,6 +23,19 @@ export class IfThen implements Stmt {
   unparse(): string {
     return `if ${this.cond.unparse()} then { ${this.thenBody.unparse()} }`;
   }
+
+    optimize(state: State): Stmt {
+      let optimizedCondition = cond.optimize(state);
+      let optimizedBody=this.thenBody.optimize(state);
+      if (optimizedCondition instanceof  TruthValue){
+          if(optimizedCondition){
+            return optimizedBody
+          }else{
+            return new Skip/// hay que hacerlo;
+          }
+      }
+      return new IfThen(optimizedCondition,optimizedBody);
+    }
 
   compileCIL(context: CompilationContext): CompilationContext {
     var tag1=context.getTag();
