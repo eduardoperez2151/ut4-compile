@@ -30,4 +30,8 @@ export class TruthValue implements Exp {
   maxStackIL(value: number): number {
     return value + 1;
   }
+
+  optimization(state:State):Exp{
+    return this;
+  }
 }

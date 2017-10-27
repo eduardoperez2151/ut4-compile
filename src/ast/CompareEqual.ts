@@ -1,4 +1,6 @@
 import { Exp } from './ASTNode';
+import { TruthValue } from './AST';
+import { Numeral } from './AST';
 import { CompilationContext } from '../compileCIL/CompilationContext';
 
 /**
@@ -33,5 +35,19 @@ export class CompareEqual implements Exp {
     var lhsStack = this.lhs.maxStackIL(value);
     var rhsStack = this.rhs.maxStackIL(value)+ 1;
     return Math.max(lhsStack,rhsStack);
+  }
+  optimization(state:State):Exp {
+    var lhsOp = this.optimization(state);
+    var rhsOp = this.optimization(state);
+
+    if (lhsOp instanceof TruthValue && rhsOp instanceof TruthValue){
+        var op = lhsOp == rhsOp
+        return new TruthValue(op);
+    }
+    if (lhsOp instanceof Numeral && rhsOp instanceof Numeral){
+        var op = lhsOp == rhsOp
+        return new TruthValue(op);
+    }
+    return new CompareEqual(lhsOp, rhsOp);
   }
 }

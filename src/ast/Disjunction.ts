@@ -1,4 +1,5 @@
 import { Exp } from './ASTNode';
+import { TruthValue } from './AST';
 import { CompilationContext } from '../compileCIL/CompilationContext';
 
 /**
@@ -33,5 +34,18 @@ export class Disjunction implements Exp {
     var lhsStack = this.lhs.maxStackIL(value);
     var rhsStack = this.rhs.maxStackIL(value)+1;
     return Math.max(lhsStack,rhsStack);
+  }
+
+  optimization(state:State):Exp {
+    var lhsOp = this.optimization(state);
+    var rhsOp = this.optimization(state);
+
+    if (lhsOp instanceof TruthValue && rhsOp instanceof TruthValue){
+      if (lhsOp.value || rhsOp.value ){
+        return new TruthValue(true);
+      }
+      return new TruthValue(true);
+    }
+    return new Disjunction(lhsOp,rhsOp);
   }
 }

@@ -1,4 +1,5 @@
 import { Exp } from './ASTNode';
+import { TruthValue } from './AST';
 import { CompilationContext } from '../compileCIL/CompilationContext';
 
 /**
@@ -34,4 +35,15 @@ export class Conjunction implements Exp {
     var rhsStack = this.rhs.maxStackIL(value)+ 1;
     return Math.max(lhsStack,rhsStack);
   }
+
+  optimization(state:State):Exp {
+    var lhsOp = this.optimization(state);
+    var rhsOp = this.optimization(state);
+    if(lhsOp instanceof TruthValue && rhsOp instanceof TruthValue){
+      if (!(lhsOp as TruthValue).value || !(lhsOp as TruthValue).value){
+        return new TruthValue(false);
+      }
+      return new TruthValue(true);
+    }
+    return new Conjunction(lhsOp, rhsOp);
 }

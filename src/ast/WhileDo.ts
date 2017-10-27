@@ -1,4 +1,5 @@
 import { Exp, Stmt } from './ASTNode';
+import { TruthValue } from './AST';
 import { CompilationContext } from '../compileCIL/CompilationContext';
 
 /**
@@ -37,4 +38,14 @@ export class WhileDo implements Stmt {
     const maxStackILBody = this.body.maxStackIL(value);
     return 1 + maxStackILBody;
   }
+  optimization(state:State):Stmt {
+    var condOp = this.cond.optimization(state);
+    var bodyOp = this.optimization(state);
+
+    if (condOp instanceof TruthValue){
+      if(!condOp.value){
+        return new Skip();
+      }
+  }
+  return new WhileDo(condOp,bodyOp);
 }
