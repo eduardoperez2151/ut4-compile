@@ -21,8 +21,8 @@ export class Addition implements Exp {
         return `Addition(${this.lhs.toString()}, ${this.rhs.toString()})`;
     }
 
-    unparse(): string {
-        return `(${this.lhs.unparse()} + ${this.rhs.unparse()})`;
+    unParse(): string {
+        return `(${this.lhs.unParse()} + ${this.rhs.unParse()})`;
     }
 
     optimize(state: State): Exp {
@@ -53,8 +53,8 @@ export class Addition implements Exp {
     }
 
     maxStackIL(value: number): number {
-        var lhsStack = this.lhs.maxStackIL(value);
-        var rhsStack = this.rhs.maxStackIL(value) + 1;
+        let lhsStack = this.lhs.maxStackIL(value);
+        let rhsStack = this.rhs.maxStackIL(value) + 1;
         return Math.max(lhsStack, rhsStack);
     }
 }

@@ -1,6 +1,7 @@
-import { Exp } from './ASTNode';
-import { TruthValue } from './AST';
-import { CompilationContext } from '../compileCIL/CompilationContext';
+import {Exp} from './ASTNode';
+import {TruthValue} from './AST';
+import {CompilationContext} from '../compileCIL/CompilationContext';
+import {State} from "../state/State";
 
 /**
   Representación de conjunciones booleanas (AND).
@@ -19,11 +20,20 @@ export class Disjunction implements Exp {
     return `Disjunction(${this.lhs.toString()}, ${this.rhs.toString()})`;
   }
 
-  unparse(): string {
-    return `(${this.lhs.unparse()} || ${this.rhs.unparse()})`;
+  unParse(): string {
+    return `(${this.lhs.unParse()} || ${this.rhs.unParse()})`;
   }
 
-  compileCIL(context: CompilationContext): CompilationContext {
+    optimize(state: State): any {
+        let lhsOp = this.optimize(state);
+        let rhsOp = this.optimize(state);
+        if (lhsOp instanceof TruthValue && rhsOp instanceof TruthValue) {
+            return new TruthValue(lhsOp.value || rhsOp.value);
+        }
+        return new Disjunction(lhsOp, rhsOp);
+    }
+
+    compileCIL(context: CompilationContext): CompilationContext {
     this.lhs.compileCIL(context);
     this.rhs.compileCIL(context);
     context.appendInstruction("or");
@@ -36,16 +46,4 @@ export class Disjunction implements Exp {
     return Math.max(lhsStack,rhsStack);
   }
 
-  optimization(state:State):Exp {
-    var lhsOp = this.optimization(state);
-    var rhsOp = this.optimization(state);
-
-    if (lhsOp instanceof TruthValue && rhsOp instanceof TruthValue){
-      if (lhsOp.value || rhsOp.value ){
-        return new TruthValue(true);
-      }
-      return new TruthValue(true);
-    }
-    return new Disjunction(lhsOp,rhsOp);
-  }
 }

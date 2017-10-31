@@ -3,6 +3,7 @@ import { CompilationContext } from '../compileCIL/CompilationContext';
 import {State} from "../state/State";
 import {TruthValue} from "./TruthValue";
 import {Sequence} from "./Sequence";
+import {Skip} from "./Skip";
 
 /**
   Representación de las sentencias condicionales.
@@ -20,18 +21,18 @@ export class IfThen implements Stmt {
     return `IfThen(${this.cond.toString()}, ${this.thenBody.toString()})`;
   }
 
-  unparse(): string {
-    return `if ${this.cond.unparse()} then { ${this.thenBody.unparse()} }`;
+  unParse(): string {
+    return `if ${this.cond.unParse()} then { ${this.thenBody.unParse()} }`;
   }
 
     optimize(state: State): Stmt {
-      let optimizedCondition = cond.optimize(state);
+      let optimizedCondition = this.cond.optimize(state);
       let optimizedBody=this.thenBody.optimize(state);
       if (optimizedCondition instanceof  TruthValue){
-          if(optimizedCondition){
+          if(optimizedCondition.value){
             return optimizedBody
           }else{
-            return new Skip/// hay que hacerlo;
+            return new Skip();
           }
       }
       return new IfThen(optimizedCondition,optimizedBody);

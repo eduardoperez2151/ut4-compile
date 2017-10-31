@@ -1,5 +1,8 @@
 import { Exp } from './ASTNode';
 import { CompilationContext } from '../compileCIL/CompilationContext';
+import {Numeral} from "./Numeral";
+import {TruthValue} from "./TruthValue";
+import {State} from "../state/State";
 
 /**
   Representación de las comparaciones por menor o igual.
@@ -18,9 +21,24 @@ export class CompareLessOrEqual implements Exp {
     return `CompareLessOrEqual(${this.lhs.toString()}, ${this.rhs.toString()})`;
   }
 
-  unparse(): string {
-    return `(${this.lhs.unparse()} <= ${this.rhs.unparse()})`;
+  unParse(): string {
+    return `(${this.lhs.unParse()} <= ${this.rhs.unParse()})`;
   }
+
+    optimize(state: State): any {
+        let leftSideOptimized = this.lhs.optimize(state);
+        let rightSideOptimized = this.rhs.optimize(state);
+
+        if (leftSideOptimized instanceof Numeral && rightSideOptimized instanceof Numeral) {
+            return new TruthValue(leftSideOptimized <= rightSideOptimized);
+        }
+
+        if (leftSideOptimized instanceof TruthValue && rightSideOptimized instanceof TruthValue) {
+            return new TruthValue(leftSideOptimized <= rightSideOptimized);
+        }
+
+        return new CompareLessOrEqual(leftSideOptimized, rightSideOptimized);
+    }
 
   compileCIL(context: CompilationContext): CompilationContext {
     this.lhs.compileCIL(context);

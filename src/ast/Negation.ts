@@ -1,32 +1,42 @@
-import { Exp } from './ASTNode';
-import { CompilationContext } from '../compileCIL/CompilationContext';
+import {Exp} from './ASTNode';
+import {CompilationContext} from '../compileCIL/CompilationContext';
+import {State} from "../state/State";
+import {TruthValue} from "./TruthValue";
 
 /**
-  Representación de las negaciones de expresiones booleanas.
-*/
+ Representación de las negaciones de expresiones booleanas.
+ */
 export class Negation implements Exp {
 
-  exp: Exp;
+    exp: Exp;
 
-  constructor(exp: Exp) {
-    this.exp = exp;
-  }
+    constructor(exp: Exp) {
+        this.exp = exp;
+    }
 
-  toString(): string {
-    return `Negation(${this.exp.toString()})`;
-  }
+    toString(): string {
+        return `Negation(${this.exp.toString()})`;
+    }
 
-  unparse(): string {
-    return `(!${this.exp.unparse()})`;
-  }
+    unParse(): string {
+        return `(!${this.exp.unParse()})`;
+    }
 
-  compileCIL(context: CompilationContext): CompilationContext {
-    this.exp.compileCIL(context);
-    context.appendInstruction("neg");
-    return context;
-  }
+    optimize(state: State) {
+        let expressionOptimized = this.exp.optimize(state);
+        if (expressionOptimized instanceof TruthValue) {
+            return new TruthValue(!expressionOptimized.value);
+        }
+        return new Negation(expressionOptimized);
+    }
 
-  maxStackIL(value: number): number {
-    return value;
-  }
+    compileCIL(context: CompilationContext): CompilationContext {
+        this.exp.compileCIL(context);
+        context.appendInstruction("neg");
+        return context;
+    }
+
+    maxStackIL(value: number): number {
+        return value;
+    }
 }
