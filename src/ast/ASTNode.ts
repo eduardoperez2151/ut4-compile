@@ -16,9 +16,9 @@ export interface ASTNode {
  */
 export interface Exp extends ASTNode {
 
-    compileCIL(context: CompilationContext): CompilationContext;
-
-    maxStackIL(value: number): number;
+  compileCIL(context: CompilationContext): CompilationContext;
+  maxStackIL(value: number): number;
+  optimization(state:State):Exp;
 
 }
 
@@ -29,8 +29,8 @@ export interface Exp extends ASTNode {
  */
 export interface Stmt extends ASTNode {
 
-    compileCIL(context: CompilationContext): CompilationContext;
-
-    maxStackIL(value: number): number;
+  compileCIL(context: CompilationContext): CompilationContext;
+  maxStackIL(value: number): number;
+  optimization(state:State):Stmt
 
 }
