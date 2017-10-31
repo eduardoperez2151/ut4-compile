@@ -25,8 +25,8 @@ export class Disjunction implements Exp {
   }
 
     optimize(state: State): any {
-        let lhsOp = this.optimize(state);
-        let rhsOp = this.optimize(state);
+        let lhsOp = this.lhs.optimize(state);
+        let rhsOp = this.rhs.optimize(state);
         if (lhsOp instanceof TruthValue && rhsOp instanceof TruthValue) {
             return new TruthValue(lhsOp.value || rhsOp.value);
         }

@@ -30,11 +30,11 @@ export class CompareLessOrEqual implements Exp {
         let rightSideOptimized = this.rhs.optimize(state);
 
         if (leftSideOptimized instanceof Numeral && rightSideOptimized instanceof Numeral) {
-            return new TruthValue(leftSideOptimized <= rightSideOptimized);
+            return new TruthValue(leftSideOptimized.value <= rightSideOptimized.value);
         }
 
         if (leftSideOptimized instanceof TruthValue && rightSideOptimized instanceof TruthValue) {
-            return new TruthValue(leftSideOptimized <= rightSideOptimized);
+            return new TruthValue(leftSideOptimized.value <= rightSideOptimized.value);
         }
 
         return new CompareLessOrEqual(leftSideOptimized, rightSideOptimized);

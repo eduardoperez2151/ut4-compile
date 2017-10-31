@@ -42,7 +42,7 @@ export class Sequence implements Stmt {
     }
 
     maxStackIL(value: number): number {
-        var maxStack = value;
+        let maxStack = value;
         for (let stmt of this.statements) {
             value = stmt.maxStackIL(value)
             maxStack = Math.max(maxStack, value);
